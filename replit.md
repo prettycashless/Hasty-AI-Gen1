@@ -1,44 +1,63 @@
-# [Project name]
+# Hasty AI Gen1
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+Hasty is a Discord bot with moderation, utility, fun, tickets, and AI-powered
+conversation features, plus a small health-check API service.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
+- `pnpm --filter @workspace/hasty-bot run dev` — run the Discord bot
+- `pnpm --filter @workspace/api-server run dev` — run the API server
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
 - `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
+- `pnpm --filter @workspace/hasty-bot run deploy` — deploy slash commands
+- Required secret env: `DISCORD_TOKEN`, `MISTRAL_API_KEY`, `FISH_AUDIO_API_KEY`
+- Required non-secret env: `DISCORD_CLIENT_ID`
+- Optional non-secret env: `DISCORD_GUILD_ID` for instant guild-only slash-command updates
+- Runtime-managed env: `DATABASE_URL`
 
 ## Stack
 
 - pnpm workspaces, Node.js 24, TypeScript 5.9
+- Discord bot: discord.js 14
 - API: Express 5
-- DB: PostgreSQL + Drizzle ORM
+- DB library: PostgreSQL + Drizzle ORM (the current bot persistence remains JSON-backed)
 - Validation: Zod (`zod/v4`), `drizzle-zod`
 - API codegen: Orval (from OpenAPI spec)
 - Build: esbuild (CJS bundle)
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/hasty-bot/src/` — Discord bot source, commands, handlers, events, and AI integrations
+- `artifacts/hasty-bot/data/` — JSON-backed bot settings, warnings, tickets, and permissions
+- `artifacts/api-server/src/` — Express API server and health route
+- `lib/db/` — Drizzle database package and schema source
+- `lib/api-spec/openapi.yaml` — API contract source
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- The Discord bot keeps its existing JSON file persistence under `artifacts/hasty-bot/data/`.
+- PostgreSQL is provisioned and connected through the runtime-managed `DATABASE_URL`.
+- The shared API server is kept separate from the Discord gateway process.
+- Slash command registration is global unless `DISCORD_GUILD_ID` is provided.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+Hasty provides a general-purpose Discord community bot with moderation commands,
+utility and fun commands, ticket handling, configurable guild settings, and
+AI-powered responses with Mistral and Fish Audio.
 
 ## User preferences
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
+- Keep the imported project structure intact unless a change is required to run it.
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- `DISCORD_TOKEN` and `DISCORD_CLIENT_ID` are checked during bot startup.
+- Mistral and Fish Audio keys are required when their corresponding AI features are used.
+- `DISCORD_GUILD_ID` is optional; without it, command deployment uses global registration.
+- `pnpm --filter @workspace/db run push` currently reports no schema changes because the Drizzle schema is empty.
 
 ## Pointers
 
