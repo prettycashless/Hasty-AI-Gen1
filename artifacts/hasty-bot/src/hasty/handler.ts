@@ -122,6 +122,64 @@ async function executeCommandTags(
   }
 }
 
+interface PendingMemoryOperation {
+  type: "save" | "summary" | "update" | "delete";
+  id?: string;
+  content?: string;
+}
+
+function extractMemoryOperations(text: string): {
+  cleaned: string;
+  operations: PendingMemoryOperation[];
+} {
+  const operations: PendingMemoryOperation[] = [];
+  let cleaned = text;
+
+  cleaned = cleaned.replace(/\[MEMORY_SAVE\]([\s\S]*?)\[\/MEMORY_SAVE\]/gi, (_, content: string) => {
+    if (content.trim()) operations.push({ type: "save", content: content.trim() });
+    return "";
+  });
+  cleaned = cleaned.replace(/\[MEMORY_SUMMARY\]([\s\S]*?)\[\/MEMORY_SUMMARY\]/gi, (_, content: string) => {
+    if (content.trim()) operations.push({ type: "summary", content: content.trim() });
+    return "";
+  });
+  cleaned = cleaned.replace(/\[MEMORY_UPDATE:([^\]]+)\]([\s\S]*?)\[\/MEMORY_UPDATE\]/gi, (
+    _,
+    id: string,
+    content: string,
+  ) => {
+    if (id.trim() && content.trim()) {
+      operations.push({ type: "update", id: id.trim(), content: content.trim() });
+    }
+    return "";
+  });
+  cleaned = cleaned.replace(/\[MEMORY_DELETE:([^\]]+)\]/gi, (_, id: string) => {
+    if (id.trim()) operations.push({ type: "delete", id: id.trim() });
+    return "";
+  });
+
+  return { cleaned: cleaned.trim(), operations };
+}
+
+function executeMemoryOperations(
+  operations: PendingMemoryOperation[],
+  message: Message,
+): void {
+  if (message.author.id !== HASTY_OWNER_ID) return;
+
+  for (const operation of operations) {
+    if (operation.type === "save" && operation.content) {
+      hastyMemory.appendLongMemory(HASTY_OWNER_ID, operation.content, { role: "note", kind: "note" });
+    } else if (operation.type === "summary" && operation.content) {
+      hastyMemory.setLongSummary(HASTY_OWNER_ID, operation.content);
+    } else if (operation.type === "update" && operation.id && operation.content) {
+      hastyMemory.updateLongMemory(HASTY_OWNER_ID, operation.id, operation.content);
+    } else if (operation.type === "delete" && operation.id) {
+      hastyMemory.removeLongMemory(HASTY_OWNER_ID, operation.id);
+    }
+  }
+}
+
 // ─── Reaction extraction ────────────────────────────────────────────────────
 // Strips [REACT:emoji] tags from Hasty's response and returns them separately.
 
@@ -220,6 +278,7 @@ async function buildSystemPrompt(
   ]);
   const facts = hastyMemory.getFacts();
   const userFacts = hastyMemory.getUserFacts(message.author.id);
+  const longMemoryContext = hastyMemory.buildMemoryContext(message.author.id, message.content);
   const ownerStyle = hastyMemory.buildStyleDescription(HASTY_OWNER_ID);
   const authorStyle =
     message.author.id !== HASTY_OWNER_ID
@@ -306,6 +365,11 @@ async function buildSystemPrompt(
     `- You know about all bot commands and can run prefix commands yourself when asked.`,
     `- To run a prefix command, write [CMD:name arg1 arg2] anywhere in your response. Example: [CMD:ping] or [CMD:help server]`,
     `- You can combine [CMD:...] with normal text. The command runs after your message sends.`,
+    `- As the owner's assistant, you can inspect long-term memory with [CMD:memory] or [CMD:memory search words].`,
+    `- Only when your owner explicitly asks you to remember or update something, use [MEMORY_SAVE]text[/MEMORY_SAVE] to append a permanent note.`,
+    `- You can replace the owner's long-term summary with [MEMORY_SUMMARY]summary[/MEMORY_SUMMARY].`,
+    `- You can update a known entry with [MEMORY_UPDATE:entry-id]new text[/MEMORY_UPDATE] or remove it with [MEMORY_DELETE:entry-id].`,
+    `- Never use memory tags for non-owner users, and never save passwords, API keys, tokens, or other secrets.`,
     `- Slash commands (/) cannot be run by you directly — tell the user to run those themselves.`,
     ``,
     `Slash commands (reference only — tell users to run these):`,
@@ -337,6 +401,8 @@ async function buildSystemPrompt(
     serverContext,
     recentMessages,
   ];
+
+  if (longMemoryContext) parts.push(`\n${longMemoryContext}`);
 
   if (facts.length > 0) {
     parts.push(`\n## Remembered Facts`);
@@ -499,6 +565,9 @@ export async function handleHastyMessage(
   if (authorId === HASTY_OWNER_ID && content.length > 2) {
     hastyMemory.learnUserStyle(authorId, content);
   }
+  if (authorId === HASTY_OWNER_ID && content.length > 0) {
+    hastyMemory.recordConversation(authorId, "user", content);
+  }
   if (authorId === HASTY_OWNER_ID && isMemoryCandidate(content)) {
     void rememberImportantFacts(authorId, content);
   }
@@ -532,13 +601,16 @@ export async function handleHastyMessage(
       const newSession = hastyState.getSession(guildId, channelId)!;
       const raw = await getAIResponse(message, newSession, client);
       const normalized = (!raw || raw === SKIP_SIGNAL || raw.startsWith(SKIP_SIGNAL)) ? "Ready." : raw;
-      const { cleaned: afterCmds, commands } = extractCommands(normalized);
+      const { cleaned: afterMemory, operations } = extractMemoryOperations(normalized);
+      executeMemoryOperations(operations, message);
+      const { cleaned: afterCmds, commands } = extractCommands(afterMemory);
       const { cleaned: reply, emojis } = extractReactions(afterCmds);
       const finalReply = reply || "Ready.";
 
       await applyReactions(message, emojis);
       hastyState.addToHistory(guildId, channelId, "user", content, authorId, message.author.displayName);
       hastyState.addToHistory(guildId, channelId, "assistant", finalReply);
+      hastyMemory.recordConversation(authorId, "assistant", finalReply);
        await sendMessage(message, finalReply, wantsVoiceReply(content));
       if (commands.length) await executeCommandTags(commands, message, client);
     } catch (err) {
@@ -562,7 +634,9 @@ export async function handleHastyMessage(
 
     try {
       const raw = await getAIResponse(message, session, client);
-      const { cleaned: afterCmds, commands } = extractCommands(raw ?? "");
+      const { cleaned: afterMemory, operations } = extractMemoryOperations(raw ?? "");
+      executeMemoryOperations(operations, message);
+      const { cleaned: afterCmds, commands } = extractCommands(afterMemory);
       const { cleaned: reply, emojis } = extractReactions(afterCmds);
 
       // Reactions and commands fire even on skip/reaction-only responses
@@ -576,6 +650,7 @@ export async function handleHastyMessage(
 
       hastyState.addToHistory(guildId, channelId, "user", content, authorId, message.author.displayName);
       hastyState.addToHistory(guildId, channelId, "assistant", reply);
+      hastyMemory.recordConversation(authorId, "assistant", reply);
        await sendMessage(message, reply, wantsVoiceReply(content));
       if (commands.length) await executeCommandTags(commands, message, client);
       return true;

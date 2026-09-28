@@ -31,6 +31,7 @@ conversation features, plus a small health-check API service.
 
 - `artifacts/hasty-bot/src/` — Discord bot source, commands, handlers, events, and AI integrations
 - `artifacts/hasty-bot/data/` — JSON-backed bot settings, warnings, tickets, and permissions
+- `artifacts/data/hasty-memory.json` — persistent Hasty memory, including the owner's long-form summary and uncapped conversation entries
 - `artifacts/api-server/src/` — Express API server and health route
 - `lib/db/` — Drizzle database package and schema source
 - `lib/api-spec/openapi.yaml` — API contract source
@@ -58,6 +59,8 @@ AI-powered responses with Mistral and Fish Audio.
 - Mistral and Fish Audio keys are required when their corresponding AI features are used.
 - `DISCORD_GUILD_ID` is optional; without it, command deployment uses global registration.
 - `pnpm --filter @workspace/db run push` currently reports no schema changes because the Drizzle schema is empty.
+- Owner-only `s!memory` commands can inspect, search, append, summarize, edit, and delete long-term memory.
+- Long-term owner memory has no application-level entry or character cap; only the excerpt sent to Mistral is limited to keep prompts usable.
 
 ## Pointers
 
