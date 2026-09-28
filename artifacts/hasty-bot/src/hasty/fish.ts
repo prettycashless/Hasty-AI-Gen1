@@ -35,7 +35,8 @@ function getOggDurationSecs(audio: Buffer): number {
     offset = pageEnd;
   }
 
-  return Math.max(1, Number(lastGranulePosition) / OPUS_SAMPLE_RATE);
+  // Discord's voice-message payload expects a whole-number duration.
+  return Math.max(1, Math.ceil(Number(lastGranulePosition) / OPUS_SAMPLE_RATE));
 }
 
 function buildWaveform(audio: Buffer): string {
@@ -62,17 +63,30 @@ function buildWaveform(audio: Buffer): string {
   return waveform.toString("base64");
 }
 
-export function prepareSpeechText(text: string): string {
-  const cleaned = text
+export function prepareSpeechText(text: string, strict = false): string {
+  let cleaned = text
     .replace(/\[EMBED\][\s\S]*?\[\/EMBED\]/gi, "")
     .replace(/\[GIF:[^\]]+\]/gi, "")
     .replace(/\[CMD:[^\]]+\]/gi, "")
     .replace(/\[REACT:[^\]]+\]/gi, "")
+    .replace(/\[MEMORY_[^\]]+\][\s\S]*?\[\/MEMORY_[^\]]+\]/gi, "")
     .replace(/```[\s\S]*?```/g, "")
-    .replace(/[*_~`>#]/g, "")
     .replace(/\s+/g, " ")
     .trim();
 
+  if (strict) {
+    // Strict voice replies must never narrate stage directions or delivery notes.
+    cleaned = cleaned
+      .replace(/\*[^*]*\*/g, " ")
+      .replace(/\([^)]*\)/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    const quoted = cleaned.match(/["“]([^"”]+)["”]/);
+    if (quoted?.[1]?.trim()) cleaned = quoted[1].trim();
+  }
+
+  cleaned = cleaned.replace(/[*_~`>#]/g, "").replace(/\s+/g, " ").trim();
   return cleaned.slice(0, 2_000) || "I don't have anything to add.";
 }
 
@@ -82,9 +96,13 @@ export function wantsVoiceReply(content: string): boolean {
   );
 }
 
-export async function synthesizeVoice(text: string): Promise<FishAudioResult> {
+export async function synthesizeVoice(
+  text: string,
+  options: { strict?: boolean } = {},
+): Promise<FishAudioResult> {
   const apiKey = process.env["FISH_AUDIO_API_KEY"];
   if (!apiKey) throw new Error("FISH_AUDIO_API_KEY is not set.");
+  const speechText = prepareSpeechText(text, options.strict ?? false);
 
   const response = await fetch(FISH_AUDIO_API_URL, {
     method: "POST",
@@ -94,7 +112,7 @@ export async function synthesizeVoice(text: string): Promise<FishAudioResult> {
       model: FISH_AUDIO_MODEL,
     },
     body: JSON.stringify({
-      text: `[warmly] ${prepareSpeechText(text)}`,
+      text: options.strict ? speechText : `[warmly] ${speechText}`,
       reference_id: FISH_AUDIO_REFERENCE_ID,
       format: "opus",
     }),
