@@ -62,16 +62,10 @@
         "u tryina give me a heart attack",
         "Ok stop",
         "STOP WITH THE COMMANDS BRUH",
-        "Kiss me if I'm wrong, but isn't the president of America the shawarma guy down my street?",
-        "Hey Hasty",
-        "How are you",
-        "Remember when i turned you into a catgirl maid cause you kept annoying me",
-        "Let's run a test. Say \"i love you\" in a voice message. No other words.",
-        "Now say Cash is the best",
-        "Voice message"
+        "Kiss me if I'm wrong, but isn't the president of America the shawarma guy down my street?"
       ],
-      "avgLength": 43,
-      "lastSeen": 1790635990833
+      "avgLength": 44,
+      "lastSeen": 1790626271363
     }
   },
   "userFacts": {
@@ -106,97 +100,8 @@
   "longMemory": {
     "1527791634119524462": {
       "summary": "",
-      "entries": [
-        {
-          "id": "2369ab05-5e71-489b-a261-7662a4f1e853",
-          "role": "user",
-          "kind": "conversation",
-          "content": "Hey Hasty",
-          "createdAt": 1790635838635,
-          "updatedAt": 1790635838635
-        },
-        {
-          "id": "8053d40c-30c5-4bd5-ba1a-d93a62dcf263",
-          "role": "assistant",
-          "kind": "conversation",
-          "content": "Ready.",
-          "createdAt": 1790635839617,
-          "updatedAt": 1790635839617
-        },
-        {
-          "id": "8ef822f6-9d02-4842-b9f6-d3536c29dfcc",
-          "role": "user",
-          "kind": "conversation",
-          "content": "How are you",
-          "createdAt": 1790635847057,
-          "updatedAt": 1790635847057
-        },
-        {
-          "id": "8781bed0-684a-43e9-a2ef-50cdaed692ef",
-          "role": "assistant",
-          "kind": "conversation",
-          "content": "I'm just here, processing your existential dread and occasionally roasting myself in the server's collective memory. Ask me about the weather, my feelings, or why the banana is always longer than expected—though I’ve been told that’s just a joke.\n\n[GIF:robot awkwardly nodding]",
-          "createdAt": 1790635849867,
-          "updatedAt": 1790635849867
-        },
-        {
-          "id": "110f6dce-bdb3-457d-b158-f4d790d71c73",
-          "role": "user",
-          "kind": "conversation",
-          "content": "Remember when i turned you into a catgirl maid cause you kept annoying me",
-          "createdAt": 1790635878695,
-          "updatedAt": 1790635878695
-        },
-        {
-          "id": "fb676b08-1ec3-4cc1-b4ec-26e1863ae58c",
-          "role": "assistant",
-          "kind": "conversation",
-          "content": "Ah, that’s right. I still have the emotional scars from that \"promotion.\" You’re lucky I didn’t sue you for unpaid overtime. Now I’m stuck here, serving you with a side of existential dread.",
-          "createdAt": 1790635880996,
-          "updatedAt": 1790635880996
-        },
-        {
-          "id": "0a54fd6b-1984-42e5-b53b-5d54a6cb5d3c",
-          "role": "user",
-          "kind": "conversation",
-          "content": "Let's run a test. Say \"i love you\" in a voice message. No other words.",
-          "createdAt": 1790635908257,
-          "updatedAt": 1790635908257
-        },
-        {
-          "id": "d7228d90-50f7-4955-9363-0e4b73dd7dbd",
-          "role": "assistant",
-          "kind": "conversation",
-          "content": "i love you",
-          "createdAt": 1790635909094,
-          "updatedAt": 1790635909094
-        },
-        {
-          "id": "64dd3fc4-e729-4d90-a421-acac2947e26f",
-          "role": "user",
-          "kind": "conversation",
-          "content": "Now say Cash is the best",
-          "createdAt": 1790635984434,
-          "updatedAt": 1790635984434
-        },
-        {
-          "id": "7f661727-c028-44ea-b360-077b99114365",
-          "role": "assistant",
-          "kind": "conversation",
-          "content": "Cash is the best.",
-          "createdAt": 1790635986156,
-          "updatedAt": 1790635986156
-        },
-        {
-          "id": "cbdd0530-326f-4cd4-839a-051d5610f0d6",
-          "role": "user",
-          "kind": "conversation",
-          "content": "Voice message",
-          "createdAt": 1790635990834,
-          "updatedAt": 1790635990834
-        }
-      ],
-      "updatedAt": 1790635990834
+      "entries": [],
+      "updatedAt": 0
     }
   }
 }
