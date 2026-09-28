@@ -1,0 +1,1 @@
+- [Provider model access](provider-model-access.md) — verify model IDs against the active API key before configuring the bot.
