@@ -51,6 +51,24 @@ function isAuthorized(userId: string): boolean {
   return userId === HASTY_OWNER_ID;
 }
 
+function extractExactVoiceText(content: string): string | null {
+  const strictRequest =
+    /\b(?:only|just|exactly)\b/i.test(content) &&
+    /\b(?:say|speak|thing|words)\b/i.test(content);
+  if (!strictRequest) return null;
+
+  const quoted = content.match(/["“]([^"”\r\n]+)["”]/);
+  return quoted?.[1]?.trim() || null;
+}
+
+function isStrictVoiceRequest(content: string): boolean {
+  return Boolean(
+    extractExactVoiceText(content) ||
+      (/\b(?:voice|audio)\b/i.test(content) &&
+        /\b(?:only|just|exactly|nothing else|no jokes|no extra)\b/i.test(content)),
+  );
+}
+
 function parseDurationFromContent(content: string): number | null {
   const match = content.match(/\bfor\s+(\d+)\s*(min(?:ute)?s?|hours?|hrs?)\b/i);
   if (!match) return null;
@@ -279,6 +297,8 @@ async function buildSystemPrompt(
   const facts = hastyMemory.getFacts();
   const userFacts = hastyMemory.getUserFacts(message.author.id);
   const longMemoryContext = hastyMemory.buildMemoryContext(message.author.id, message.content);
+  const voiceRequested = wantsVoiceReply(message.content);
+  const exactVoiceText = extractExactVoiceText(message.content);
   const ownerStyle = hastyMemory.buildStyleDescription(HASTY_OWNER_ID);
   const authorStyle =
     message.author.id !== HASTY_OWNER_ID
@@ -345,6 +365,14 @@ async function buildSystemPrompt(
     `## Voice Messages`,
     `- When a user explicitly asks for a voice message, answer with the exact concise text that should be spoken.`,
     `- Keep voice replies natural and conversational. Avoid markdown, tables, long lists, URLs, and embed syntax.`,
+    `- If the user says "only", "just", "exactly", "nothing else", or gives quoted words, obey that literally.`,
+    `- Never add stage directions, narration, jokes, sighs, sound effects, or commentary to a strict voice request.`,
+    ...(voiceRequested && isStrictVoiceRequest(message.content)
+      ? [
+          `- This is a strict voice request. Output only the requested spoken words and nothing else.`,
+          ...(exactVoiceText ? [`- The exact spoken text is: "${exactVoiceText}"`] : []),
+        ]
+      : []),
     ``,
     `## GIFs & Images`,
     `- You can send a GIF by writing [GIF:search terms] anywhere in your response. Example: [GIF:cat judging you]`,
@@ -433,21 +461,34 @@ async function buildSystemPrompt(
 
 // ─── Send Hasty's message ──────────────────────────────────────────────────
 
-async function sendMessage(message: Message, text: string, voice = false): Promise<void> {
+async function sendMessage(
+  message: Message,
+  text: string,
+  voice = false,
+  strictVoice = false,
+): Promise<void> {
   if (voice) {
     try {
-      const audio = await synthesizeVoice(text);
+      const audio = await synthesizeVoice(text, { strict: strictVoice });
       try {
         await sendVoiceMessage(message.channelId, audio);
       } catch (error) {
         console.error("[Hasty] Discord voice payload failed; sending audio attachment:", error);
-        await (message.channel as TextChannel).send({
-          files: [{ attachment: audio.audio, name: "hasty-voice.ogg" }],
-        });
+        if (message.channel.isSendable()) {
+          await message.channel.send({
+            files: [{ attachment: audio.audio, name: "hasty-voice.ogg" }],
+          });
+        }
       }
       return;
     } catch (error) {
       console.error("[Hasty] Voice message failed; sending text fallback:", error);
+      if (message.channel.isSendable()) {
+        await message.channel
+          .send({ content: "I couldn't generate the voice message this time." })
+          .catch(() => null);
+      }
+      return;
     }
   }
 
@@ -605,13 +646,16 @@ export async function handleHastyMessage(
       executeMemoryOperations(operations, message);
       const { cleaned: afterCmds, commands } = extractCommands(afterMemory);
       const { cleaned: reply, emojis } = extractReactions(afterCmds);
-      const finalReply = reply || "Ready.";
+      const voiceRequested = wantsVoiceReply(content);
+      const strictVoice = voiceRequested && isStrictVoiceRequest(content);
+      const exactVoiceText = strictVoice ? extractExactVoiceText(content) : null;
+      const finalReply = exactVoiceText || reply || "Ready.";
 
       await applyReactions(message, emojis);
       hastyState.addToHistory(guildId, channelId, "user", content, authorId, message.author.displayName);
       hastyState.addToHistory(guildId, channelId, "assistant", finalReply);
       hastyMemory.recordConversation(authorId, "assistant", finalReply);
-       await sendMessage(message, finalReply, wantsVoiceReply(content));
+      await sendMessage(message, finalReply, voiceRequested, strictVoice);
       if (commands.length) await executeCommandTags(commands, message, client);
     } catch (err) {
       console.error("[Hasty] Mistral error on wake:", err);
@@ -638,20 +682,24 @@ export async function handleHastyMessage(
       executeMemoryOperations(operations, message);
       const { cleaned: afterCmds, commands } = extractCommands(afterMemory);
       const { cleaned: reply, emojis } = extractReactions(afterCmds);
+      const voiceRequested = wantsVoiceReply(content);
+      const strictVoice = voiceRequested && isStrictVoiceRequest(content);
+      const exactVoiceText = strictVoice ? extractExactVoiceText(content) : null;
+      const finalReply = exactVoiceText || reply;
 
       // Reactions and commands fire even on skip/reaction-only responses
       if (emojis.length) await applyReactions(message, emojis);
 
-      if (!reply || reply === SKIP_SIGNAL || reply.startsWith(SKIP_SIGNAL)) {
+      if (!finalReply || finalReply === SKIP_SIGNAL || finalReply.startsWith(SKIP_SIGNAL)) {
         hastyState.addToHistory(guildId, channelId, "user", content, authorId, message.author.displayName);
         if (commands.length) await executeCommandTags(commands, message, client);
         return emojis.length > 0 || commands.length > 0;
       }
 
       hastyState.addToHistory(guildId, channelId, "user", content, authorId, message.author.displayName);
-      hastyState.addToHistory(guildId, channelId, "assistant", reply);
-      hastyMemory.recordConversation(authorId, "assistant", reply);
-       await sendMessage(message, reply, wantsVoiceReply(content));
+      hastyState.addToHistory(guildId, channelId, "assistant", finalReply);
+      hastyMemory.recordConversation(authorId, "assistant", finalReply);
+      await sendMessage(message, finalReply, voiceRequested, strictVoice);
       if (commands.length) await executeCommandTags(commands, message, client);
       return true;
     } catch (err) {
