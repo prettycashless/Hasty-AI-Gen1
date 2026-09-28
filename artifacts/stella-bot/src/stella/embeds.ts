@@ -134,7 +134,7 @@ export function buildV2Message(schema: StellaEmbedSchema): MessageCreateOptions 
         if (btn.style === "link" && btn.url) {
           builder.setURL(btn.url);
         } else {
-          builder.setCustomId(`stella_btn_${i}_${Date.now()}`);
+          builder.setCustomId(`hasty_btn_${i}_${Date.now()}`);
         }
         if (btn.disabled) builder.setDisabled(true);
         row.addComponents(builder);
@@ -151,7 +151,7 @@ export function buildV2Message(schema: StellaEmbedSchema): MessageCreateOptions 
       );
     }
     const menu = new StringSelectMenuBuilder()
-      .setCustomId(`stella_select_${Date.now()}`)
+      .setCustomId(`hasty_select_${Date.now()}`)
       .setPlaceholder(schema.select.placeholder ?? "Select an option")
       .addOptions(
         schema.select.options.slice(0, 25).map((o) => {

@@ -1,6 +1,6 @@
 kind = "api"
-previewPath = "/stella"
-title = "Stella Bot"
+previewPath = "/hasty"
+title = "Hasty Bot"
 version = "1.0.0"
 
 [[services]]
