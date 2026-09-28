@@ -33,7 +33,7 @@ outputType = "console"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "pnpm --filter @workspace/stella-bot run dev"
+args = "pnpm --filter @workspace/hasty-bot run dev"
 
 [[workflows.workflow]]
 name = "Start application"

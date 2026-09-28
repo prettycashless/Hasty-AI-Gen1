@@ -399,7 +399,7 @@ importers:
         specifier: 'catalog:'
         version: 3.25.76
 
-  artifacts/stella-bot:
+  artifacts/hasty-bot:
     dependencies:
       discord.js:
         specifier: ^14.18.0
