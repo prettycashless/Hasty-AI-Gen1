@@ -1,0 +1,1 @@
+- [Long-form owner memory](long-form-memory.md) — keep owner storage uncapped and retrieve only relevant excerpts for AI prompts.
