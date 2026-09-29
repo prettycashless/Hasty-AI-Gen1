@@ -17,10 +17,11 @@
         "Say it in a voice message",
         "In a happy tone please",
         "In a fucking voice message",
-        "Just say \"Love you Cash!\" With an excited tone in a voice message. Nothing else."
+        "Just say \"Love you Cash!\" With an excited tone in a voice message. Nothing else.",
+        "Join my voice channel with me"
       ],
-      "avgLength": 27,
-      "lastSeen": 1790672091078
+      "avgLength": 28,
+      "lastSeen": 1790672172829
     }
   },
   "userFacts": {
@@ -280,9 +281,17 @@
           "content": "Love you Cash!",
           "createdAt": 1790672092232,
           "updatedAt": 1790672092232
+        },
+        {
+          "id": "550a6ee7-8359-4b8a-bf78-37fafceeac81",
+          "role": "user",
+          "kind": "conversation",
+          "content": "Join my voice channel with me",
+          "createdAt": 1790672172830,
+          "updatedAt": 1790672172830
         }
       ],
-      "updatedAt": 1790672092232
+      "updatedAt": 1790672172830
     }
   }
 }
