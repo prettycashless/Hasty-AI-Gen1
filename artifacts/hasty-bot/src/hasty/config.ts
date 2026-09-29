@@ -26,8 +26,8 @@ export const MISTRAL_VISION_MODEL = "ministral-8b-latest";
 export const MISTRAL_API_URL = "https://api.mistral.ai/v1/chat/completions";
 export const FISH_AUDIO_API_URL = "https://api.fish.audio/v1/tts";
 export const FISH_AUDIO_MODEL = "s2.1-pro-free";
-// Public Fish Audio English female preset: soft, calm, gentle, and intimate.
-export const FISH_AUDIO_REFERENCE_ID = "ca3007f96ae7499ab87d27ea3599956a";
+// Voice selected by the owner from Fish Audio.
+export const FISH_AUDIO_REFERENCE_ID = "efb41db784f94c6dad718fbd67774a09";
 export const FISH_AUDIO_TEMPERATURE = 0.75;
 export const FISH_AUDIO_TOP_P = 0.8;
 
