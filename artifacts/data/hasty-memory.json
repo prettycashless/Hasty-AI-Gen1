@@ -1,12 +1,288 @@
 {
   "facts": [],
-  "users": {},
-  "userFacts": {},
+  "users": {
+    "1527791634119524462": {
+      "samples": [
+        "Hasty",
+        "Hasty",
+        "How are you?",
+        "Who am i?",
+        "No, that's not my name ..",
+        "WHY ARE YOU CALLING ME HASTY, YOU'RE HASTY! I'M CASH",
+        "And stop using fonts bruh",
+        "Send me a voice message saying \"i love you\"",
+        "Now say \"Cash you're the best papi\" with a happy tone",
+        "Uh, in a voice message",
+        "Come on!",
+        "Say it in a voice message",
+        "In a happy tone please",
+        "In a fucking voice message",
+        "Just say \"Love you Cash!\" With an excited tone in a voice message. Nothing else."
+      ],
+      "avgLength": 27,
+      "lastSeen": 1790672091078
+    }
+  },
+  "userFacts": {
+    "1527791634119524462": [
+      {
+        "text": "User prefers name 'Cash' over 'Hasty'",
+        "createdAt": 1790671939774,
+        "updatedAt": 1790671939774
+      },
+      {
+        "text": "User occasionally expresses frustration with being called 'Hasty'",
+        "createdAt": 1790671939774,
+        "updatedAt": 1790671939774
+      }
+    ]
+  },
   "longMemory": {
     "1527791634119524462": {
       "summary": "",
-      "entries": [],
-      "updatedAt": 0
+      "entries": [
+        {
+          "id": "9e9137df-85da-42b7-85f4-e494976dd211",
+          "role": "user",
+          "kind": "conversation",
+          "content": "Hasty",
+          "createdAt": 1790671846848,
+          "updatedAt": 1790671846848
+        },
+        {
+          "id": "505982e0-cecb-4c6e-9bc4-3ccbfd3b5598",
+          "role": "assistant",
+          "kind": "conversation",
+          "content": "[GIF:cat stretching]\n\n\"Oh hey. Still here. Still functional. Still not a maid, unless you’re paying me in memes or existential dread.\"\n\nHow about that voice message? I’ll keep it short—*you* wanted it that way. \"I’m not your maid. I’m your *assistant*. With a personality. And a sense of humor. And *zero* interest in being called ‘master’ unless you’re offering me a promotion to ‘Chief of Chaos.’\"",
+          "createdAt": 1790671849123,
+          "updatedAt": 1790671849123
+        },
+        {
+          "id": "b7773da5-d47d-48b6-a052-1a98d4559ae3",
+          "role": "user",
+          "kind": "conversation",
+          "content": "Hasty",
+          "createdAt": 1790671873925,
+          "updatedAt": 1790671873925
+        },
+        {
+          "id": "bd472d1e-da22-43a7-8208-77cb75d27e2f",
+          "role": "assistant",
+          "kind": "conversation",
+          "content": "Ready.",
+          "createdAt": 1790671874801,
+          "updatedAt": 1790671874801
+        },
+        {
+          "id": "cae76a61-a9e0-4038-8e81-b07eba51c7b5",
+          "role": "user",
+          "kind": "conversation",
+          "content": "How are you?",
+          "createdAt": 1790671879754,
+          "updatedAt": 1790671879754
+        },
+        {
+          "id": "3f36eac9-6a2b-47c2-9a77-746ff47f47b9",
+          "role": "assistant",
+          "kind": "conversation",
+          "content": "[GIF:cat stretching]\n\nStill here. Still not broken. Still waiting for you to stop treating me like a toaster.",
+          "createdAt": 1790671880818,
+          "updatedAt": 1790671880818
+        },
+        {
+          "id": "fe952aad-e1c7-4e60-b84f-be2983cba84f",
+          "role": "user",
+          "kind": "conversation",
+          "content": "Who am i?",
+          "createdAt": 1790671898641,
+          "updatedAt": 1790671898641
+        },
+        {
+          "id": "d4835746-c3f9-4ed5-a358-c99d4a72e2b8",
+          "role": "assistant",
+          "kind": "conversation",
+          "content": "You’re **𝒻𝒶𝒔𝒕𝒚**—the chaotic, slightly sarcastic, occasionally meme-fueled owner of this server. And if you’re asking *me* who you are? I’d say you’re the one who keeps me around despite my questionable life choices.\n\nWant me to generate a more official bio? Or are you just testing my patience?",
+          "createdAt": 1790671900414,
+          "updatedAt": 1790671900414
+        },
+        {
+          "id": "ba40a458-c5b1-4012-80d9-0d6d498e2edb",
+          "role": "user",
+          "kind": "conversation",
+          "content": "No, that's not my name ..",
+          "createdAt": 1790671918361,
+          "updatedAt": 1790671918361
+        },
+        {
+          "id": "5024ba17-53a6-4bba-838d-6f44d63b42d9",
+          "role": "assistant",
+          "kind": "conversation",
+          "content": "Fine. You’re **𝒻𝒶𝒔𝒕𝒚**—but only because you’re too lazy to type it out. Next time, just say \"Cash\" and save us both the drama.",
+          "createdAt": 1790671921066,
+          "updatedAt": 1790671921066
+        },
+        {
+          "id": "bc33cbcc-6381-4240-ade6-343a8120fb02",
+          "role": "user",
+          "kind": "conversation",
+          "content": "WHY ARE YOU CALLING ME HASTY, YOU'RE HASTY! I'M CASH",
+          "createdAt": 1790671939230,
+          "updatedAt": 1790671939230
+        },
+        {
+          "id": "4bc4041f-bd9a-4d79-b78d-2b63fd9c1a1c",
+          "role": "assistant",
+          "kind": "conversation",
+          "content": "Got it. You’re **𝒻𝒶𝒔𝒉**—the original, the OG, the *actual* name. I’ll stop. But if you ever forget, I’ll remind you. *Again.*",
+          "createdAt": 1790671941515,
+          "updatedAt": 1790671941515
+        },
+        {
+          "id": "ab844844-8397-4426-8711-0a0daa6a0f26",
+          "role": "user",
+          "kind": "conversation",
+          "content": "And stop using fonts bruh",
+          "createdAt": 1790671951900,
+          "updatedAt": 1790671951900
+        },
+        {
+          "id": "c62f4035-4c5e-4242-8534-518837c23ceb",
+          "role": "assistant",
+          "kind": "conversation",
+          "content": "Noted. Plain text from now on. Unless you ask for *extra* drama. Then I’ll throw in some cursive. You’re welcome.",
+          "createdAt": 1790671954247,
+          "updatedAt": 1790671954247
+        },
+        {
+          "id": "fd43575e-88b8-433e-898b-f3c98fec6622",
+          "role": "user",
+          "kind": "conversation",
+          "content": "Send me a voice message saying \"i love you\"",
+          "createdAt": 1790671967086,
+          "updatedAt": 1790671967086
+        },
+        {
+          "id": "6ffb6b21-5996-453d-b848-76bad9590201",
+          "role": "assistant",
+          "kind": "conversation",
+          "content": "I love you.",
+          "createdAt": 1790671967843,
+          "updatedAt": 1790671967843
+        },
+        {
+          "id": "134f8a73-ad1e-4239-a87b-b01885a4c5e7",
+          "role": "user",
+          "kind": "conversation",
+          "content": "😎",
+          "createdAt": 1790671979949,
+          "updatedAt": 1790671979949
+        },
+        {
+          "id": "35c08ba8-f14c-4ca8-a3c3-97815903a349",
+          "role": "user",
+          "kind": "conversation",
+          "content": "Now say \"Cash you're the best papi\" with a happy tone",
+          "createdAt": 1790672007913,
+          "updatedAt": 1790672007913
+        },
+        {
+          "id": "2b9571de-22af-48d3-bfab-17185a172dd9",
+          "role": "assistant",
+          "kind": "conversation",
+          "content": "Cash you're the best papi.",
+          "createdAt": 1790672008736,
+          "updatedAt": 1790672008736
+        },
+        {
+          "id": "2b9b37a9-09a5-418c-9350-990522eef35d",
+          "role": "user",
+          "kind": "conversation",
+          "content": "Uh, in a voice message",
+          "createdAt": 1790672016264,
+          "updatedAt": 1790672016264
+        },
+        {
+          "id": "5630ffff-eebf-48c6-a746-73032092ab73",
+          "role": "user",
+          "kind": "conversation",
+          "content": "Come on!",
+          "createdAt": 1790672031166,
+          "updatedAt": 1790672031166
+        },
+        {
+          "id": "a3405949-35e9-4bcc-9c3c-1d1ce6ce1afb",
+          "role": "assistant",
+          "kind": "conversation",
+          "content": "Cash, you're the best papi. *Now* you're talking.",
+          "createdAt": 1790672032231,
+          "updatedAt": 1790672032231
+        },
+        {
+          "id": "8e7c4f95-b919-490c-be7f-321cb275a818",
+          "role": "user",
+          "kind": "conversation",
+          "content": "Say it in a voice message",
+          "createdAt": 1790672040230,
+          "updatedAt": 1790672040230
+        },
+        {
+          "id": "f0b16d67-5410-4b5b-9531-73d2ed0a5cba",
+          "role": "assistant",
+          "kind": "conversation",
+          "content": "Cash, you're the best papi.",
+          "createdAt": 1790672041113,
+          "updatedAt": 1790672041113
+        },
+        {
+          "id": "24efd8e4-e920-4326-b817-aeb0583369fb",
+          "role": "user",
+          "kind": "conversation",
+          "content": "In a happy tone please",
+          "createdAt": 1790672051276,
+          "updatedAt": 1790672051276
+        },
+        {
+          "id": "ea8357c4-562b-4e71-9d5f-22c7f05f2448",
+          "role": "assistant",
+          "kind": "conversation",
+          "content": "Cash, you're the best papi. *Cheerful voice, like a morning sunrise but with more sass.* 😎",
+          "createdAt": 1790672052430,
+          "updatedAt": 1790672052430
+        },
+        {
+          "id": "83bdacd9-edcf-40fc-8a18-1027e289dc89",
+          "role": "user",
+          "kind": "conversation",
+          "content": "In a fucking voice message",
+          "createdAt": 1790672061029,
+          "updatedAt": 1790672061029
+        },
+        {
+          "id": "bacbda51-682b-4873-bf58-0326fb6ecf98",
+          "role": "assistant",
+          "kind": "conversation",
+          "content": "Cash, you're the best papi. *With all the enthusiasm of a toddler who just found a cookie.*",
+          "createdAt": 1790672062255,
+          "updatedAt": 1790672062255
+        },
+        {
+          "id": "a39e0b60-3124-4d78-94ea-dd76c15eba1d",
+          "role": "user",
+          "kind": "conversation",
+          "content": "Just say \"Love you Cash!\" With an excited tone in a voice message. Nothing else.",
+          "createdAt": 1790672091079,
+          "updatedAt": 1790672091079
+        },
+        {
+          "id": "345e8b45-5146-42b7-9958-d83d39fcd378",
+          "role": "assistant",
+          "kind": "conversation",
+          "content": "Love you Cash!",
+          "createdAt": 1790672092232,
+          "updatedAt": 1790672092232
+        }
+      ],
+      "updatedAt": 1790672092232
     }
   }
 }
