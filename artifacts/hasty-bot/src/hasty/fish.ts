@@ -2,6 +2,8 @@ import {
   FISH_AUDIO_API_URL,
   FISH_AUDIO_MODEL,
   FISH_AUDIO_REFERENCE_ID,
+  FISH_AUDIO_TEMPERATURE,
+  FISH_AUDIO_TOP_P,
 } from "./config.js";
 
 const DISCORD_VOICE_MESSAGE_FLAG = 8192;
@@ -114,6 +116,13 @@ export async function synthesizeVoice(
     body: JSON.stringify({
       text: options.strict ? speechText : `[warmly] ${speechText}`,
       reference_id: FISH_AUDIO_REFERENCE_ID,
+      temperature: FISH_AUDIO_TEMPERATURE,
+      top_p: FISH_AUDIO_TOP_P,
+      prosody: {
+        speed: 1,
+        volume: 0,
+        normalize_loudness: true,
+      },
       format: "opus",
     }),
   });
